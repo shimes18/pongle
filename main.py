@@ -25,7 +25,7 @@ hit_sound = pygame.mixer.Sound("sounds/hit.ogg")
 hit_sound.set_volume(0.7)
 
 pygame.mixer.music.load("sounds/bg.ogg")
-pygame.mixer.music.set_volume(0.4)
+pygame.mixer.music.set_volume(0.2)
 pygame.mixer.music.play(-1)
 
 
@@ -39,6 +39,8 @@ speedx=1
 speedy=1
 running=True
 game_over=False
+game_finish=False
+game_home=True
 direction_x=random.choice([-1,1])
 direction_y=random.choice([-1,1])
 
@@ -63,12 +65,14 @@ while running:
              direction_x=random.choice([-1,1])
              direction_y=random.choice([-1,1])
              game_over=False
+        if game_finish and event.type=pygame.KEYDOWN and event.key == pygame.K_s:
+             game_home = True
 
 
     ball.x+=int((direction_x)*5*speedx)
     ball.y+=int((direction_y)*5*speedy)
 
-    if not game_over:
+    if not game_over and not game_finish:
         press=pygame.key.get_pressed()
         if press[pygame.K_w]:
             player1.y-=10
@@ -240,9 +244,10 @@ while running:
                 timerr2=0
                 item_sound.play()
 
-
-
-
+        if (score1==1):
+            game_finish=True
+        if (score2==1):
+            game_finish=True
 
 
 
@@ -268,7 +273,7 @@ while running:
 
     scoret= font.render(str(score1) + " - " + str(score2),True,(255,255,255))
 
-    if game_over:
+    if game_over and not game_finish:
      start = font.render("Press R to continue ", True, (255,255,255))
      screen.blit(start,(300,250))
 
@@ -295,6 +300,22 @@ while running:
     if (r2==1):
         screen.blit(reverse,(0,40))
     screen.blit(scoret,(400,0))
+
+    if game_finish:
+        if (score1>score2):
+            winner="Player1"
+        if(score2>score1):
+            winner="Player2"
+        winnert = font.render("WINNER IS "+ winner, True , (255,255,255))
+        instruction = font.render("Press S to return to main menu", True , (255,255,255))
+        screen.blit(winnert,(300,200))
+        screen.blit(instruction,(200,250))
+
+    if game_home:
+        textt = font.render("Press Spacebar to start",True,(255,255,255))
+        rulet = font.render("Press R for rules", True,(255,255,255))
+        screen.blit(textt,(300,200))
+        screen.blit(rulet,(220,250))
     pygame.display.flip()
     clock.tick(fps)
 
