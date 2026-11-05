@@ -2,6 +2,7 @@ import pygame
 import random
 
 pygame.init()
+pygame.mixer.init()
 
 screen= pygame.display.set_mode((800,600))
 player1=pygame.Rect(0,350,5,80)
@@ -16,6 +17,16 @@ score2=0
 
 lcounter1=1
 lcounter2=1
+
+item_sound = pygame.mixer.Sound("sounds/acquired.ogg")
+item_sound.set_volume(0.8)
+
+hit_sound = pygame.mixer.Sound("sounds/hit.ogg")
+hit_sound.set_volume(0.7)
+
+pygame.mixer.music.load("sounds/bg.ogg")
+pygame.mixer.music.set_volume(0.4)
+pygame.mixer.music.play(-1)
 
 
 speedcounter=0
@@ -37,8 +48,6 @@ l1,l2=0,0
 e1,e2,timere1,timere2,ecounter1,ecounter2=0,0,0,0,1,1
 
 s1,s2,timers1,timers2,scounter1,scounter2=0,0,0,0,1,1
-
-f1,f2,timerf1,timerf2,fcounter1,fcounter2=0,0,0,0,1,1
 
 r1,r2,timerr1,timerr2,rcounter1,rcounter2=0,0,0,0,1,1
 
@@ -70,10 +79,32 @@ while running:
         if press[pygame.K_DOWN]:
                 player2.y+=10
 
-        if player1.y>=520:
-            player1.y=520
-        if player2.y>=520:
-            player2.y=520
+        if r2==1:
+            timerr2+=1
+            if timerr2<10*fps:
+                press1=pygame.key.get_pressed()
+                if press1[pygame.K_w]:
+                    player1.y+=20
+                if press1[pygame.K_s]:
+                    player1.y-=20
+            else:
+                r2=0
+
+        if r1==1:
+            timerr1+=1
+            if timerr1<10*fps:
+                press2=pygame.key.get_pressed()
+                if press2[pygame.K_UP]:
+                    player2.y+=20
+                if press2[pygame.K_DOWN]:
+                    player2.y-=20
+            else:
+                r1=0
+
+        if player1.y>=600-player1.h:
+            player1.y=600-player1.h
+        if player2.y>=600-player2.h:
+            player2.y=600-player2.h
         if player1.y<0:
             player1.y=0
         if player2.y<0:
@@ -102,8 +133,11 @@ while running:
 
         if player1.colliderect(ball):
              speedx=-speedx
+             hit_sound.play()
         if player2.colliderect(ball):
              speedx=-speedx
+             hit_sound.play()
+
 
 
         if ball.y<0:
@@ -116,22 +150,28 @@ while running:
             if lcounter1==1:
                 lcounter1=0
                 l1=1
+                item_sound.play()
         if score2==5:
             if lcounter2==1:
                 lcounter2=0
                 l2=1
+                item_sound.play()
+
 
         if score1==8:
             if ecounter1==1:
                 ecounter1=0
                 e1=1
                 timere1=0
+                item_sound.play()
+
 
         if score2==8:
             if ecounter2==1:
                 ecounter2=0
                 e2=1
                 timere2=0
+                item_sound.play()
 
 
 
@@ -156,12 +196,16 @@ while running:
                 scounter1=0
                 s1=1
                 timers1=0
+                item_sound.play()
+
 
         if score2==12:
             if scounter2==1:
                 scounter2=0
                 s2=1
                 timers2=0
+                item_sound.play()
+
 
 
 
@@ -181,20 +225,40 @@ while running:
                 player2.h=80
                 s1=0
 
+        if score1==16:
+            if rcounter1==1:
+                rcounter1=0
+                r1=1
+                timerr1=0
+                item_sound.play()
+
+
+        if score2==16:
+            if rcounter2==1:
+                rcounter2=0
+                r2=1
+                timerr2=0
+                item_sound.play()
+
+
+
+
+
+
 
 
         if (score1+score2==5 and speedcounter==0):
-            speedx = speedx*1.5
-            speedy = speedy*1.5
+            speedx = speedx*1.25
+            speedy = speedy*1.25
             speedcounter=1
             print(speedx)
         if (score1+score2==10 and speedcounter==1):
-            speedx = speedx*1.5
-            speedy = speedy*1.5
+            speedx = speedx*1.25
+            speedy = speedy*1.25
             speedcounter=2
         if (score1+score2==15 and speedcounter==2):
-            speedx = speedx*1.5
-            speedy = speedy*1.5
+            speedx = speedx*1.25
+            speedy = speedy*1.25
             speedcounter=3
 
     screen.fill((20,20,20))
@@ -211,6 +275,7 @@ while running:
     life=font.render("+1 life",True,(255,255,255))
     extend=font.render("Long",True,(255,255,255))
     shrink= font.render("Shrink",True,(255,255,255))
+    reverse= font.render("Reversed", True, (255,255,255))
 
     if (l1==1):
         screen.blit(life,(0,0))
@@ -222,9 +287,13 @@ while running:
     if (e2==1):
         screen.blit(extend,(700,40))
     if (s1==1):
-        screen.blit(shrink,(700,40))
+        screen.blit(shrink,(700,80))
     if (s2==1):
-        screen.blit(shrink,(0,40))
+        screen.blit(shrink,(0,80))
+    if (r1==1):
+        screen.blit(reverse,(700,40))
+    if (r2==1):
+        screen.blit(reverse,(0,40))
     screen.blit(scoret,(400,0))
     pygame.display.flip()
     clock.tick(fps)
