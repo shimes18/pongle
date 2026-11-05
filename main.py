@@ -33,10 +33,17 @@ direction_y=random.choice([-1,1])
 
 
 l1,l2=0,0
+
 e1,e2,timere1,timere2,ecounter1,ecounter2=0,0,0,0,1,1
-s1,s2=0,0
+
+s1,s2,timers1,timers2,scounter1,scounter2=0,0,0,0,1,1
+
 f1,f2=0,0
-store1,store2=0,0
+
+r1,r2,timerr1,timerr2,rcounter1,rcounter2=0,0,0,0,1,1
+
+fr1,fr2,timerfr1,timerfr2,frcounter1,frcounter2=0,0,0,0,1,1
+
 
 while running:
     for event in pygame.event.get():
@@ -142,7 +149,37 @@ while running:
                 player1.h = 160
             else:
                 player1.h=80
-                e1=0
+                s1=0
+
+        if score1==1:
+            if scounter1==1:
+                scounter1=0
+                s1=1
+                timers1=0
+
+        if score2==1:
+            if scounter2==1:
+                scounter2=0
+                s2=1
+                timers2=0
+
+
+
+        if s2==12:
+            timers2+=1
+            if timers2<10*fps:
+                player1.h = 30
+            else:
+                player1.h=80
+                s2=0
+
+        if s1==12:
+            timers1+=1
+            if timers1<10*fps:
+                player2.h = 30
+            else:
+                player2.h=80
+                s1=0
 
 
 
@@ -173,6 +210,7 @@ while running:
 
     life=font.render("+1 life",True,(255,255,255))
     extend=font.render("Long",True,(255,255,255))
+    shrink= font.render("Shrink",True,(255,255,255))
 
     if (l1==1):
         screen.blit(life,(0,0))
@@ -183,6 +221,10 @@ while running:
         screen.blit(extend,(0,40))
     if (e2==1):
         screen.blit(extend,(700,40))
+    if (s1==1):
+        screen.blit(shrink,(700,40))
+    if (s2==1):
+        screen.blit(shrink,(0,40))
     screen.blit(scoret,(400,0))
     pygame.display.flip()
     clock.tick(fps)
