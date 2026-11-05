@@ -38,7 +38,7 @@ e1,e2,timere1,timere2,ecounter1,ecounter2=0,0,0,0,1,1
 
 s1,s2,timers1,timers2,scounter1,scounter2=0,0,0,0,1,1
 
-f1,f2=0,0
+f1,f2,timerf1,timerf2,fcounter1,fcounter2=0,0,0,0,1,1
 
 r1,r2,timerr1,timerr2,rcounter1,rcounter2=0,0,0,0,1,1
 
@@ -151,13 +151,13 @@ while running:
                 player1.h=80
                 s1=0
 
-        if score1==1:
+        if score1==12:
             if scounter1==1:
                 scounter1=0
                 s1=1
                 timers1=0
 
-        if score2==1:
+        if score2==12:
             if scounter2==1:
                 scounter2=0
                 s2=1
@@ -165,7 +165,7 @@ while running:
 
 
 
-        if s2==12:
+        if s2==1:
             timers2+=1
             if timers2<10*fps:
                 player1.h = 30
@@ -173,7 +173,7 @@ while running:
                 player1.h=80
                 s2=0
 
-        if s1==12:
+        if s1==1:
             timers1+=1
             if timers1<10*fps:
                 player2.h = 30
