@@ -107,26 +107,26 @@ while running:
             if lcounter1==1:
                 lcounter1=0
                 l1=1
-        if score1==5:
+        if score2==5:
             if lcounter2==1:
-                lcounter1=0
+                lcounter2=0
                 l2=1
 
         print(speedx)
 
 
         if (score1+score2==5 and speedcounter==0):
-            speedx = speedx*2
-            speedy = speedy*2
+            speedx = speedx*1.5
+            speedy = speedy*1.5
             speedcounter=1
             print(speedx)
         if (score1+score2==10 and speedcounter==1):
-            speedx = speedx*2
-            speedy = speedy*2
+            speedx = speedx*1.5
+            speedy = speedy*1.5
             speedcounter=2
         if (score1+score2==15 and speedcounter==2):
-            speedx = speedx*2
-            speedy = speedy*2
+            speedx = speedx*1.5
+            speedy = speedy*1.5
             speedcounter=3
 
     screen.fill((20,20,20))
@@ -140,12 +140,12 @@ while running:
      start = font.render("Press R to continue ", True, (255,255,255))
      screen.blit(start,(300,250))
 
+    life=font.render("+1 life",True,(255,255,255))
+
     if (l1==1):
-        life=font.render("+1 life",True,(255,255,255))
         screen.blit(life,(0,0))
     if (l2==1):
-        life=font.render("+1 life",True,(255,255,255))
-        screen.blit(life,(0,600))
+        screen.blit(life,(400,0))
     screen.blit(scoret,(400,0))
     pygame.display.flip()
     clock.tick(20)
