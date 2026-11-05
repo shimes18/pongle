@@ -20,6 +20,8 @@ lcounter2=1
 
 speedcounter=0
 
+fps=30
+
 clock=pygame.time.Clock()
 
 speedx=1
@@ -31,7 +33,7 @@ direction_y=random.choice([-1,1])
 
 
 l1,l2=0,0
-e1,e2=0,0
+e1,e2,timere1,timere2,ecounter1,ecounter2=0,0,0,0,1,1
 s1,s2=0,0
 f1,f2=0,0
 store1,store2=0,0
@@ -47,8 +49,8 @@ while running:
              game_over=False
 
 
-    ball.x+=(direction_x)*5*speedx
-    ball.y+=(direction_y)*5*speedy
+    ball.x+=int((direction_x)*5*speedx)
+    ball.y+=int((direction_y)*5*speedy)
 
     if not game_over:
         press=pygame.key.get_pressed()
@@ -112,7 +114,36 @@ while running:
                 lcounter2=0
                 l2=1
 
-        print(speedx)
+        if score1==8:
+            if ecounter1==1:
+                ecounter1=0
+                e1=1
+                timere1=0
+
+        if score2==8:
+            if ecounter2==1:
+                ecounter2=0
+                e2=1
+                timere2=0
+
+
+
+        if e2==1:
+            timere2+=1
+            if timere2<10*fps:
+                player2.h = 160
+            else:
+                player2.h=80
+                e2=0
+
+        if e1==1:
+            timere1+=1
+            if timere1<10*fps:
+                player1.h = 160
+            else:
+                player1.h=80
+                e1=0
+
 
 
         if (score1+score2==5 and speedcounter==0):
@@ -141,13 +172,19 @@ while running:
      screen.blit(start,(300,250))
 
     life=font.render("+1 life",True,(255,255,255))
+    extend=font.render("Long",True,(255,255,255))
 
     if (l1==1):
         screen.blit(life,(0,0))
     if (l2==1):
-        screen.blit(life,(400,0))
+        screen.blit(life,(700,0))
+
+    if (e1==1):
+        screen.blit(extend,(0,40))
+    if (e2==1):
+        screen.blit(extend,(700,40))
     screen.blit(scoret,(400,0))
     pygame.display.flip()
-    clock.tick(20)
+    clock.tick(fps)
 
 pygame.quit()
