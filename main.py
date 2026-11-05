@@ -7,11 +7,14 @@ pygame.mixer.init()
 screen= pygame.display.set_mode((800,600))
 player1=pygame.Rect(0,350,5,80)
 player2=pygame.Rect(795,350,5,80)
-ball= pygame.Rect(395,295,10,10)
-ballradius=5
+ball= pygame.Rect(395,295,20,20)
+ballradius=10
 
+icounter2=1
+icounter1=1
 font = pygame.font.SysFont(None,32)
 
+ballvisible=True
 score1=0
 score2=0
 
@@ -28,7 +31,13 @@ pygame.mixer.music.load("sounds/bg.ogg")
 pygame.mixer.music.set_volume(0.2)
 pygame.mixer.music.play(-1)
 
+logo=pygame.image.load("images/user.png").convert_alpha()
+logo= pygame.transform.scale(logo,(40,40))
 
+ballimg=pygame.image.load("images/image.png").convert_alpha()
+ballimg= pygame.transform.scale(ballimg,(20,20))
+
+newvar=0
 speedcounter=0
 
 fps=30
@@ -65,13 +74,47 @@ while running:
              ball= pygame.Rect(395,295,10,10) 
              direction_x=random.choice([-1,1])
              direction_y=random.choice([-1,1])
+             ballvisible=True
              game_over=False
         if game_finish and event.type==pygame.KEYDOWN and event.key == pygame.K_s:
              game_home = True
              game_over = False
              game_finish = False
+             direction_x=random.choice([-1,1])
+             direction_y=random.choice([-1,1])
+
+             speedx=1
+             speedy=1
+
+             newvar=0
+
+             l1,l2=0,0
+             lcounter1=1
+             lcounter2=1
+
+             icounter2=1
+             icounter1=1
+
+             e1,e2,timere1,timere2,ecounter1,ecounter2=0,0,0,0,1,1
+
+             s1,s2,timers1,timers2,scounter1,scounter2=0,0,0,0,1,1
+
+             r1,r2,timerr1,timerr2,rcounter1,rcounter2=0,0,0,0,1,1
+
+             fr1,fr2,timerfr1,timerfr2,frcounter1,frcounter2=0,0,0,0,1,1
+
+             player1=pygame.Rect(0,350,5,80)
+             player2=pygame.Rect(795,350,5,80)
+             ball= pygame.Rect(395,295,10,10)
+
+
         if game_home and event.type==pygame.KEYDOWN and event.key == pygame.K_SPACE:
+             score1=0
+             score2=0
+             game_over=False
+             game_finish=False
              game_home=False
+             rule_space=False
         if game_home and event.type==pygame.KEYDOWN and event.key == pygame.K_r and not game_over:
              game_home=False
              rule_space=True
@@ -82,8 +125,8 @@ while running:
 
 
     if not game_over and not game_finish and not game_home and not rule_space:
-        ball.x+=int((direction_x)*5*speedx)
-        ball.y+=int((direction_y)*5*speedy)
+        ball.x+=int(direction_x*5*speedx)+newvar*direction_x*speedx
+        ball.y+=int(direction_y*5*speedy)+newvar*direction_y*speedx
         press=pygame.key.get_pressed()
         if press[pygame.K_w]:
             player1.y-=10
@@ -135,7 +178,7 @@ while running:
                 speedx=-speedx
             ball.x+=20
   
-        if ball.x<0:
+        if ball.x<-10:
             if l1==0:
                 score2+=1
                 game_over=True
@@ -204,7 +247,7 @@ while running:
                 player1.h = 160
             else:
                 player1.h=80
-                s1=0
+                e1=0
 
         if score1==12:
             if scounter1==1:
@@ -229,7 +272,7 @@ while running:
             if timers2<10*fps:
                 player1.h = 30
             else:
-                player1.h=80
+                player1.h = 80
                 s2=0
 
         if s1==1:
@@ -237,7 +280,7 @@ while running:
             if timers1<10*fps:
                 player2.h = 30
             else:
-                player2.h=80
+                player2.h = 80
                 s1=0
 
         if score1==16:
@@ -255,42 +298,54 @@ while running:
                 timerr2=0
                 item_sound.play()
 
-        if (score1==1):
+        if score2==20 :
+            if icounter2==1:
+                temp1=score1
+                temp2=score2
+                icounter2=0
+            if (temp1+temp2==score1+score2):
+                ballvisible=False
+
+
+        if score1==20 :
+            if icounter1==1:
+                temp1=score1
+                temp2=score2
+                icounter1=0
+            if (temp1+temp2==score1+score2):
+                ballvisible=False
+
+        if (score1==25):
             game_finish=True
-        if (score2==1):
+        if (score2==25):
             game_finish=True
 
 
 
 
-        if (score1==5 or score2==5 and speedcounter==0):
-            speedx = speedx*1.25
-            speedy = speedy*1.25
+        if (score1==5 or score2==5) and speedcounter==0:
+            newvar+=1
             speedcounter=1
             print(speedx)
-        if (score1==10 or score2==10 and speedcounter==1):
-            speedx = speedx*1.25
-            speedy = speedy*1.25
+        if (score1==10 or score2==10) and speedcounter==1:
+            newvar+=1
+
             speedcounter=2
-        if (score1==15 or score2==15 and speedcounter==2):
-            speedx = speedx*1.25
-            speedy = speedy*1.25
+        if (score1==15 or score2==15) and speedcounter==2:
+            newvar+=1
+
             speedcounter=3
-        if (score1==20 or score2==20 and speedcounter==3):
-            speedx = speedx*1.25
-            speedy = speedy*1.25
+        if (score1==20 or score2==20) and speedcounter==3:
+            newvar+=1
             speedcounter=4
-        if (score1==25 or score2==25 and speedcounter==4):
-            speedx = speedx*1.25
-            speedy = speedy*1.25
-            speedcounter=5
+
     screen.fill((20,20,20))
         
     if not game_home and not rule_space and not game_finish:
         player1= pygame.draw.rect(screen, (255,255,255),player1)
         player2= pygame.draw.rect(screen, (255,255,255),player2)
-        ball=pygame.draw.circle(screen,(255,255,255),(ball.x + ball.w//2, ball.y+ ball.h//2),ballradius,0)
-
+        if ballvisible:
+            screen.blit(ballimg,ball)
         scoret= font.render(str(score1) + " - " + str(score2),True,(255,255,255))
         screen.blit(scoret,(400,0))
 
@@ -318,15 +373,17 @@ while running:
     if (s2==1):
         screen.blit(shrink,(0,80))
     if (r1==1):
-        screen.blit(reverse,(700,40))
+        screen.blit(reverse,(700,120))
     if (r2==1):
-        screen.blit(reverse,(0,40))
+        screen.blit(reverse,(0,120))
 
     if game_finish:
         if (score1>score2):
             winner="Player1"
+            score1,score2=0,0
         if(score2>score1):
             winner="Player2"
+            score1,score2=0,0
         winnert = font.render("WINNER IS "+ winner, True , (255,255,255))
         instruction = font.render("Press S to return to main menu", True , (255,255,255))
         screen.blit(winnert,(300,200))
@@ -335,7 +392,8 @@ while running:
     if game_home and not rule_space:
         textt = font.render("Press Spacebar to start",True,(255,255,255))
         rulet = font.render("Press R for rules", True,(255,255,255))
-        screen.blit(textt,(300,200))
+        screen.blit(logo,(350,160))
+        screen.blit(textt,(250,200))
         screen.blit(rulet,(300,250))
 
 
@@ -356,6 +414,10 @@ while running:
         screen.blit(rule5, (100,250))
         screen.blit(rule6, (100,300))
         screen.blit(back,(300,350))
+    
+    if not ballvisible:
+        inv = font.render("INVISIBLE BALL",True,(255,255,255))
+        screen.blit(inv,(350,50))
     pygame.display.flip()
     clock.tick(fps)
 
