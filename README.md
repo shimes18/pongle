@@ -1,6 +1,8 @@
 # pongle
 My second pygamw project . Pong but there's power ups every few points
 
+Pygbag was used to make it web accessible which adds new files other than main.py, you can ignore those :)
+
 Tools used:
 >Pygame
 >Pygbag to make it web playable
